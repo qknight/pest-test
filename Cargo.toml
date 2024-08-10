@@ -1,0 +1,13 @@
+[package]
+name = "pest-test"
+version = "0.1.0"
+edition = "2021"
+
+[unstable]
+build-std = ["core", "alloc"]
+
+[dependencies]
+pest = { version = "2", default-features = true }
+pest_derive = { version = "2", default-features = true }
+log="*"
+indoc = "*"
