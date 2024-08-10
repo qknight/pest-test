@@ -58,12 +58,8 @@ fn parse_emission(input: &str) -> Result<Vec<Emission>, pest::error::Error<Rule>
         for record in parsed.into_inner() {
             // println!("record: {}", record);
             match record.as_rule() {
-                Rule::line => {
-                    println!("found line");
-                }
-                Rule::entry => {
-                    println!("entry rule: {}", record);
-
+                Rule::EdgeD => {
+                    // println!("EdgeD rule: {}", record);
                     let mut inner_rules = record.into_inner();
                     let label = inner_rules.next().unwrap().as_str().trim_matches('"').to_string();
                     let number_str = inner_rules.next().unwrap().as_str();
@@ -78,18 +74,22 @@ fn parse_emission(input: &str) -> Result<Vec<Emission>, pest::error::Error<Rule>
                     let category = inner_rules.next().unwrap().as_str().to_string();
                     result.push(Emission::EdgeDefined(line_number + 1, label, number, category));
                 }
-                Rule::text_entry => {
-                    println!("text_entry rule: {}", record);
-
+                Rule::EdgeU => {
+                    // println!("EdgeU rule: {}", record);
                     let mut inner_rules = record.into_inner();
                     let label = inner_rules.next().unwrap().as_str().trim_matches('"').to_string();
                     let category = inner_rules.next().unwrap().as_str().to_string();
                     result.push(Emission::EdgeUndefined(line_number + 1, label, category));
                 }
-                Rule::section => {
-                    println!("section rule: {}", record);
-                }
+                // Rule::EdgeU_NQ => {
+                //     // println!("EdgeU rule: {}", record);
 
+                //     let mut inner_rules = record.into_inner();
+                //     let label = inner_rules.next().unwrap().as_str().trim_matches('"').to_string();
+                //     let category = inner_rules.next().unwrap().as_str().to_string();
+                //     result.push(Emission::EdgeUndefined(line_number + 1, label, category));
+                // }
+                
                 _ => {
                     println!("no rule detected");
 
@@ -103,8 +103,14 @@ fn parse_emission(input: &str) -> Result<Vec<Emission>, pest::error::Error<Rule>
 
 fn main() {
     let input = indoc! {"
-    \"a\" 1,233   asdf asdf
-    \"a\" 1,233   asdf \n \"asdf\" asdf
+    \"Flüssiggas \" 1,233   asdf   asdf
+    \"a\" 2,345   asdf 
+    \"asdf\" asdf
+
+    \"asdf\"
+    \"werk1\" \"werk2\"
+    a a
+    \"b\" b
     "};
     //[ a0_ a ]
     // let input = indoc! {" // FIXME broken

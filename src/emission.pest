@@ -4,19 +4,19 @@ quote = _{ "\"" }
 identifier = { (!quote ~ ANY)+ }
 comma = _{ "," }
 
+char = { ASCII_ALPHANUMERIC | "." | "_" | "/" }
+name = { char+ }
+
 german_number = @{ ASCII_DIGIT{1,3} ~ ("." ~ ASCII_DIGIT{3})* ~ ("," ~ ASCII_DIGIT+)? }
 us_number = @{ ASCII_DIGIT{1,3} ~ ("," ~ ASCII_DIGIT{3})* ~ ("." ~ ASCII_DIGIT+)? }
 
-entry = { (quote ~ identifier ~ quote) ~ WHITESPACE* ~ (german_number | us_number) ~ WHITESPACE* ~ comma? ~ WHITESPACE* ~ identifier }
+EdgeD = { (quote ~ identifier ~ quote) ~ WHITESPACE* ~ (german_number | us_number) ~ WHITESPACE* ~ comma? ~ WHITESPACE* ~ identifier }
+EdgeU = { (quote ~ identifier ~ quote) ~ WHITESPACE* ~ (quote ~ identifier ~ quote)}
 
+EdgeU_NQ = { ( identifier ~ WHITESPACE* ~ identifier ) }
 
-char = { ASCII_ALPHANUMERIC | "." | "_" | "/" }
-name = { char+ }
-text_entry = { name ~ " " ~ name }
 EMPTY = _{ WHITESPACE* }
 
-section = { "[" ~ name ~ "]" }
-
 line = { 
-    (entry | text_entry | section | EMPTY)
+    (EdgeD | EdgeU | EMPTY)
 }
