@@ -106,7 +106,6 @@ fn main() {
     \"Flüssiggas \" 1,233   asdf   asdf
     \"a\" 2,345   asdf 
     \"asdf\" asdf
-
     \"asdf\"
     \"werk1\" \"werk2\"
     a a
