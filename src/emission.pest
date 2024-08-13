@@ -1,22 +1,22 @@
+// see https://pest.rs/ for live editing of grammer
+//     https://docs.rs/pest/latest/pest/
+
 WHITESPACE = _{ " " | "\t" }
 
 quote = _{ "\"" }
 identifier = { (!quote ~ ANY)+ }
-comma = _{ "," }
 
-char = { ASCII_ALPHANUMERIC | "." | "_" | "/" }
-name = { char+ }
+number = @{
+  (ASCII_DIGIT+ ~ ("." | ",") ~ ASCII_DIGIT*) 
+  | (ASCII_DIGIT* ~ ("." | ",") ~ ASCII_DIGIT+)
+  | ASCII_DIGIT+
+}
 
-german_number = @{ ASCII_DIGIT{1,3} ~ ("." ~ ASCII_DIGIT{3})* ~ ("," ~ ASCII_DIGIT+)? }
-us_number = @{ ASCII_DIGIT{1,3} ~ ("," ~ ASCII_DIGIT{3})* ~ ("." ~ ASCII_DIGIT+)? }
-
-EdgeD = { (quote ~ identifier ~ quote) ~ WHITESPACE* ~ (german_number | us_number) ~ WHITESPACE* ~ comma? ~ WHITESPACE* ~ identifier }
+EdgeD = { (quote ~ identifier ~ quote) ~ WHITESPACE* ~ number ~ WHITESPACE* ~ (quote ~ identifier ~ quote) }
 EdgeU = { (quote ~ identifier ~ quote) ~ WHITESPACE* ~ (quote ~ identifier ~ quote)}
 
-EdgeU_NQ = { ( identifier ~ WHITESPACE* ~ identifier ) }
-
-EMPTY = _{ WHITESPACE* }
+EMPTY = _ { WHITESPACE+ }
 
 line = { 
-    (EdgeD | EdgeU | EMPTY)
+    ( EdgeD | EdgeU | EMPTY )
 }
